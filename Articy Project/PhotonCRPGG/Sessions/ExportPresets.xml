@@ -1,0 +1,16 @@
+<ExportPresets LastType="UnrealExport">
+  <Preset DisplayName="" Type="UnrealExport">
+    <ExportSettings Type="UnrealExport">
+      <Filename>Y:\Documents\Unreal Projects\PhotonCRPG\Content\PhotonCRPGG.articyue</Filename>
+      <CustomSettings>
+        <Option Name="set_TextFormatter" Value="Unity"/>
+        <Option Name="set_IncludingAssets" Value="True"/>
+        <Option Name="set_IncludedNodes" Value="Settings, Project, GlobalVariables, ObjectDefinitions, Packages, ScriptMethods, Hierarchy, Assets, Languages"/>
+      </CustomSettings>
+      <PackageStates>
+        <State Id="72057594037928209" Enabled="1"/>
+      </PackageStates>
+      <SelectedRuleSet>72057594037928206</SelectedRuleSet>
+    </ExportSettings>
+  </Preset>
+</ExportPresets>

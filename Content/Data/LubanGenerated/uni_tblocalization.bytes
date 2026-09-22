@@ -1,0 +1,7 @@
+(HP血量HPARP护甲ARPAP	行动点APMP	移动点MPStrength力量StrengthAgility敏捷Agility	Toughness坚韧	Toughness
+Perception感知
+Perception	Willpower意志	WillpowerIntelligence智力Intelligence
+Fellowship社交
+FellowshipAttack	攻击力AttackDefence	防御力DefenceSpeed速度SpeedCritical	暴击率CriticalHit	命中率HitDodge	闪避率DodgeAll全部All
+Consumable	消耗品
+ConsumableWeapon武器WeaponArmor护甲ArmorProp道具PropCollectable	收集品CollectableQuest任务物品QuestMundane杂物MundanePoor劣质PoorCommon普通CommonGood优良GoodEpic史诗Epic	Legendary传说	LegendaryHelmet头盔HelmetChest胸甲ChestBelt腰带BeltLeg腿甲LegShoe鞋ShoeTrinket饰品TrinketPistol手枪PistolRifle步枪RifleSniperRifle	狙击枪SniperRifleSword剑Sword

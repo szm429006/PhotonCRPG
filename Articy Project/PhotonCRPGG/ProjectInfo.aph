@@ -1,0 +1,19 @@
+<ProjectInfo Version="1">
+  <Signature>78FF6D7E604D9F67E06E5B1E831A79C8A1A5D35FC8F78FCAD212FF2A8C222214</Signature>
+  <Content>
+    <Project Guid="0328e226-b4b4-4619-b0ad-2a7c7035be38">
+      <DisplayName Value="PhotonCRPGG"/>
+      <DetailName Value=""/>
+      <MainProjectGuid Value="f4824a11-cc66-4f5f-bbe2-23644e7511e0"/>
+      <IconType Value="0"/>
+      <IdProjectIcon Value="00000000-0000-0000-0000-000000000000"/>
+      <ScmProviderGuid Value="0745c2ee-abe3-451b-934e-7f597f56c0d7"/>
+      <ScmConfiguration Value=""/>
+      <CreationTimeStamp Value="639252080290853560"/>
+      <PartitionHash Value="CAD121770D2C2830D443BCBEBDB4AC5B901EA32AD2E5D6C36B8E616BBB07A236"/>
+      <SaveFileVersion Value="60"/>
+      <ProjectType Value="0"/>
+      <IsOnlineProject Value="False"/>
+    </Project>
+  </Content>
+</ProjectInfo>
