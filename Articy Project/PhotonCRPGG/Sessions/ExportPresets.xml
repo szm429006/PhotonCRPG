@@ -1,7 +1,7 @@
 <ExportPresets LastType="UnrealExport">
   <Preset DisplayName="" Type="UnrealExport">
     <ExportSettings Type="UnrealExport">
-      <Filename>Y:\Documents\Unreal Projects\PhotonCRPG\Content\PhotonCRPGG.articyue</Filename>
+      <Filename>Y:\Documents\Unreal Projects\PhotonCRPG\Content\PhotonCRPG.articyue</Filename>
       <CustomSettings>
         <Option Name="set_TextFormatter" Value="Unity"/>
         <Option Name="set_IncludingAssets" Value="True"/>

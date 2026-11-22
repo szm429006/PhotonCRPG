@@ -106,5 +106,5 @@ void AItemContainer::RemoveAll()
 void AItemContainer::MakeInteraction()
 {
     IInteractInterface::MakeInteraction();
-	UGlobalFunc::GetSubsystem<UUISystem>()->LoadUI<UContainerUI>()->ShowItems(this);
+	UGlobalFunc::GetSubsystem<UUISystem>()->LoadUI<UContainerUI>(TEXT("/Game/Widget/WBP_ContainerUI.WBP_ContainerUI_C"))->ShowItems(this);
 }

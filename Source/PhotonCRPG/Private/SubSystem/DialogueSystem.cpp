@@ -33,9 +33,15 @@ void UDialogueSystem::ShowDialogueItem(UArticyFlowPlayer* ArticyPlayer, const TS
             {
                 const IArticyObjectWithSpeaker* ArticySpeaker = Cast<IArticyObjectWithSpeaker>(ArticyNode);
                 const IArticyObjectWithDisplayName* ArticyDisplayName = Cast<IArticyObjectWithDisplayName>(ArticySpeaker->GetSpeaker());
+
+                // GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::White, FString::Printf(TEXT("显示对话角色: %s"), *ArticyDisplayName->GetDisplayName().ToString()));
+
                 const auto ArticyText = Cast<IArticyObjectWithText>(ArticyNode);
 
-                const auto DialogueUI = UGlobalFunc::GetSubsystem<UUISystem>()->LoadUI<UDialogueUI>();
+                // UE_LOG(LogTemp, Warning, TEXT("ShowDialogueItem: %s"), *ArticyText->GetText().ToString());
+                // GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::White, FString::Printf(TEXT("显示对话内容: %s"), *ArticyText->GetText().ToString()));
+
+                const auto DialogueUI = UGlobalFunc::GetSubsystem<UUISystem>()->LoadUI<UDialogueUI>(TEXT("/Game/Widget/WBP_DialogueUI.WBP_DialogueUI_C"));
                 if (IsValid(DialogueUI))
                 {
                     DialogueUI->AddDialogueItem(ArticyDisplayName->GetDisplayName(), ArticyText->GetText());

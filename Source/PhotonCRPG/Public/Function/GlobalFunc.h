@@ -11,6 +11,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "PhotonCRPG/PhotonCRPGGameMode.h"
 #include "Character/CharacterBase.h"
+#include "Character/Components/AbilityComponent.h"
+#include "GAS/Attribute/CoreAttributeSet.h"
 #include "GlobalFunc.generated.h"
 
 /**
@@ -60,7 +62,7 @@ public:
 	static int32 GetPlayerCoreAttr(const ECoreAttrType AttrType)
 	{
 		const auto CoreAttributeSet = Cast<UCoreAttributeSet>(GetPlayer()->GetAbilityComp()->GetAttributeSet(UCoreAttributeSet::StaticClass()));
-		
+		return 0;
 	}
 
 	// 游戏模式

@@ -24,8 +24,6 @@ public:
 		FString LangName = FInternationalization::Get().GetCurrentCulture()->GetTwoLetterISOLanguageName();
 FStringTableRegistry::Get().UnregisterStringTable(FName("All_objects"));;
 LOCTABLE_FROMFILE_GAME("All_objects", "All_objects", "ArticyContent/Generated/All_objects.csv");;
-FStringTableRegistry::Get().UnregisterStringTable(FName("All_objectts"));;
-LOCTABLE_FROMFILE_GAME("All_objectts", "All_objectts", "ArticyContent/Generated/All_objectts.csv");;
 		if (LocaleName == TEXT("zh-CN")) {
 			FStringTableRegistry::Get().UnregisterStringTable(FName("ARTICY"));;
 			LOCTABLE_FROMFILE_GAME("ARTICY", "ARTICY", "L10N/zh-CN/ArticyContent/Generated/ARTICY.csv");;

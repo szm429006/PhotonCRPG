@@ -30,6 +30,7 @@ public class ArticyRuntime : ModuleRules
 			new List<string>
 			{
 				"Core",
+				"Engine",
 				// ... add other public dependencies that you statically link with here ...
                 "MediaAssets",
 				"Json",
@@ -41,6 +42,7 @@ public class ArticyRuntime : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new List<string>
 			{
+				"Core",
 				"Projects",
 				"InputCore",
 				"CoreUObject",

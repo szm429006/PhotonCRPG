@@ -46,7 +46,7 @@ void APhotonCRPGGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	UGlobalFunc::GetSubsystem<USquadSystem>()->LoadPlayer();
-	UGlobalFunc::GetSubsystem<UUISystem>()->LoadUI<UGameUI>();
+	UGlobalFunc::GetSubsystem<UUISystem>()->LoadUI<UGameUI>(TEXT("/Game/Widget/WBP_GameUI.WBP_GameUI_C"));
 	//GEngine->GameViewport->GetWorld()->GetGameInstance()->GetSubsystem<UUISystem>()->LoadUI<UGameUI>();
 
 	ArticyPlayer->OnBranchesUpdated.AddDynamic(this, &APhotonCRPGGameMode::OnArticyBranchesUpdated);

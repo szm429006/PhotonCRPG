@@ -11,7 +11,6 @@ public class PhotonCRPG : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(new string[] {
-			"ArticyRuntime",
 			"Core",
 			"CoreUObject",
 			"Engine",
@@ -23,7 +22,8 @@ public class PhotonCRPG : ModuleRules
 			"EnhancedInput",
 			"GameplayAbilities",
 			"GameplayTags",
-			"GameplayTasks"
+			"GameplayTasks",
+			"ArticyRuntime",
 		});
     }
 }

@@ -15,6 +15,8 @@ class PHOTONCRPG_API UUISystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
+	UUISystem();
+
 protected:
 
 	UPROPERTY()
@@ -24,27 +26,24 @@ public:
 
 	// 
 	template<typename WidgetT = UUIBase>
-	WidgetT* LoadUI()
+	WidgetT* LoadUI(const FString& Path)
 	{
 		// 获取UI名称
 		const FString WidgetName = WidgetT::StaticClass()->GetName();
 		if (WidgetT* InListUI = GetUI<WidgetT>(); IsValid(InListUI))
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("�������д�UI, %s"), *WidgetName);
 			// 如果UI已关闭，加载UI
 			if (InListUI->bIsClose)
 			{
-				//UE_LOG(LogTemp, Warning, TEXT("��UI���رգ�������ʾ, %s"), *WidgetName);
 				// 加载UI
 				InListUI->DoLoad();
 			}
 			return InListUI;
 		}
-		const FString Path = FString::Printf(TEXT("/Script/Engine.Blueprint'/Game/Widget/WBP_%s.WBP_%s_C'"), *WidgetName, *WidgetName);
-		
-		//UE_LOG(LogTemp, Warning, TEXT("�½�UI, %s"), *WidgetName);
+		// const FString Path = FString::Printf(TEXT("/Game/Widget/WBP_%s.WBP_%s_C"), *WidgetName, *WidgetName);
 		// 加载UI
 		UClass* WidgetClass = LoadClass<UUIBase>(nullptr, *Path);
+
 		if (WidgetClass)
 		{
 			if (WidgetT* UI = Cast<WidgetT>(CreateWidget<UUserWidget>(GetWorld(), WidgetClass)))
@@ -146,7 +145,7 @@ public:
 
 	// 切换UI显示状态
 	template<typename WidgetT = UUIBase>
-	void ToggleUI()
+	void ToggleUI(const FString& Path)
 	{
 		if (WidgetT* UI = GetUI<WidgetT>(); IsValid(UI))
 		{
@@ -161,7 +160,7 @@ public:
 		}
 		else
 		{
-			LoadUI<WidgetT>();
+			LoadUI<WidgetT>(Path);
 		}
 	}
 

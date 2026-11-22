@@ -28,7 +28,7 @@ class PHOTONCRPG_API UCharacterUI : public UUIBase, public IInventoryInterface
 
 protected:
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<UEquipmentSlot> UEquipmentSlotClass;
 
 	UPROPERTY(meta=(BindWidget))

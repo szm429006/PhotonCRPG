@@ -7,6 +7,7 @@
 #include "DiceSystem.generated.h"
 
 enum class ECoreAttrType : uint8;
+class FSubsystemCollectionBase;
 
 /**
  * 
@@ -24,7 +25,7 @@ protected:
 
 public:
 
-	virtual void Initialize(FSubSystemCollectionBase& Collection) override;
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
 	// 获得掷骰子通过率
 	float GetPassRate_2D6(const ECoreAttrType CoreAttrType, const uint8 Target);

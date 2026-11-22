@@ -14,6 +14,8 @@
 
 UArticyPluginSettings::UArticyPluginSettings()
 {
+	if(PackageLoadSettings.Num() < 1) { return; }
+
 	bCreateBlueprintTypeForScriptMethods = true;
 	bKeepDatabaseBetweenWorlds = true;
 	bKeepGlobalVariablesBetweenWorlds = true;
@@ -23,9 +25,14 @@ UArticyPluginSettings::UArticyPluginSettings()
 
 	bSortChildrenAtGeneration = false;
 	ArticyDirectory.Path = TEXT("/Game");
+
+	UE_LOG(LogTemp, Warning, TEXT("UArticyPluginSettings::UArticyPluginSettings"));
+
 	// update package load settings after all files have been loaded
 	FAssetRegistryModule& AssetRegistry = FModuleManager::Get().GetModuleChecked<FAssetRegistryModule>("AssetRegistry");
 	AssetRegistry.Get().OnFilesLoaded().AddUObject(this, &UArticyPluginSettings::UpdatePackageSettings);
+
+	UE_LOG(LogTemp, Warning, TEXT("AssetRegistry.Get().OnFilesLoaded().AddUObject(this, &UArticyPluginSettings::UpdatePackageSettings)"));
 }
 
 bool UArticyPluginSettings::DoesPackageSettingExist(FString packageName)

@@ -150,13 +150,13 @@ void APhotonCRPGPlayerController::OnTouchReleased()
 
 void APhotonCRPGPlayerController::OnInventoryUIToggled()
 {
-	UGlobalFunc::GetSubsystem<UUISystem>()->ToggleUI<UInventoryUI>();
+	UGlobalFunc::GetSubsystem<UUISystem>()->ToggleUI<UInventoryUI>(TEXT("/Game/Widget/WBP_InventoryUI.WBP_InventoryUI_C"));
 	// UGlobalFunc::GetSubsystem<UUISystem>()->ToggleUI<UCharacterUI>();
 }
 
 void APhotonCRPGPlayerController::OnCharacterUIToggled()
 {
-	UGlobalFunc::GetSubsystem<UUISystem>()->ToggleUI<UCharacterUI>();
+	UGlobalFunc::GetSubsystem<UUISystem>()->ToggleUI<UCharacterUI>(TEXT("/Game/Widget/WBP_CharacterUI.WBP_CharacterUI_C"));
 }
 
 void APhotonCRPGPlayerController::OnCamRotate(const FInputActionInstance& Instance)
