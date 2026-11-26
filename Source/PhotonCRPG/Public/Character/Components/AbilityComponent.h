@@ -8,6 +8,7 @@
 #include "AbilityComponent.generated.h"
 
 class ACharacterBase;
+class UAbilityObject;
 
 /**
  * 
@@ -23,6 +24,9 @@ public:
 
 public:
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "数据", DisplayName = "能力池")
+	TMap<FString, UAbilityObject*> AbilityPool;
+
 	UPROPERTY()
 	TObjectPtr<ACharacterBase> Owner;
 
@@ -35,4 +39,9 @@ public:
 	virtual void DoDispose() override;
 
 	virtual ACharacterBase* GetCompOwner() const override;
+
+	UFUNCTION(BlueprintCallable, Category = "能力系统")
+	UAbilityObject* AddAbility(const FString& AbilityID);
+
+	UAbilityObject* LoadAbilityDataByID(const FString& AbilityID);
 };

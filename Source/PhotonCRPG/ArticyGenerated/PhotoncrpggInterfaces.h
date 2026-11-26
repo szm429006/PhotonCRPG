@@ -7,6 +7,22 @@
 #include "PhotoncrpggInterfaces.generated.h"
 
 
+/** UNINTERFACE generated from Articy 掷骰特性数据 Feature */
+UINTERFACE(MinimalAPI, BlueprintType, Category="Photoncrpgg Feature Interfaces", meta=(CannotImplementInterfaceInBlueprint))
+class UPhotoncrpggObjectWithRollDataFeature : public UInterface { GENERATED_BODY() };
+class IPhotoncrpggObjectWithRollDataFeature
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UFUNCTION(BlueprintCallable)
+	virtual class UPhotoncrpggRollDataFeature* GetFeatureRollData() const
+	{
+		return nullptr;
+	}
+};
+
 /** UNINTERFACE generated from Articy 基本字符属性 Feature */
 UINTERFACE(MinimalAPI, BlueprintType, Category="Photoncrpgg Feature Interfaces", meta=(CannotImplementInterfaceInBlueprint))
 class UPhotoncrpggObjectWithDefaultBasicCharacterFeatureFeature : public UInterface { GENERATED_BODY() };

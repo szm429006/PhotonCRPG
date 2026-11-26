@@ -15,6 +15,64 @@
 
 namespace cfg {
 
+namespace Ability { 
+    /// <summary>
+    /// 能力消耗类型
+    /// </summary>
+    enum class CostType
+    {
+        /// <summary>
+        /// 行动点
+        /// </summary>
+        AP = 0,
+        /// <summary>
+        /// 移动点
+        /// </summary>
+        MP = 1,
+        /// <summary>
+        /// 道具
+        /// </summary>
+        Item = 2,
+        /// <summary>
+        /// 无
+        /// </summary>
+        Null = 3,
+    };
+
+} 
+
+
+namespace Ability { 
+    /// <summary>
+    /// 能力作用类型
+    /// </summary>
+    enum class FuncType
+    {
+        /// <summary>
+        /// 攻击
+        /// </summary>
+        Attack = 0,
+        /// <summary>
+        /// 辅助
+        /// </summary>
+        Assist = 1,
+        /// <summary>
+        /// 治疗
+        /// </summary>
+        Heal = 2,
+        /// <summary>
+        /// 移动
+        /// </summary>
+        Move = 3,
+        /// <summary>
+        /// 无
+        /// </summary>
+        Null = 4,
+    };
+
+} 
+
+
 namespace Character { 
     /// <summary>
     /// 角色阵营
@@ -197,6 +255,7 @@ namespace Attr { struct Basic; }
 namespace Attr { struct Battle; }
 namespace Attr { struct Core; }
 namespace Character { struct CharacterTable; }
+namespace Gameplay { struct AbilityTable; }
 namespace Item { struct ArmorTable; }
 namespace Item { struct ItemData; }
 namespace Item { struct ItemTable; }
@@ -360,6 +419,10 @@ struct CharacterTable : public luban::CfgBean
      */
     Character::Faction faction;
     /**
+     * 对话ID
+     */
+    ::luban::SharedPtr<::luban::int32> articyId;
+    /**
      * 血量
      */
     ::luban::SharedPtr<Attr::Basic> initAttrBasic;
@@ -375,8 +438,90 @@ struct CharacterTable : public luban::CfgBean
      * 初始装备列表
      */
     ::luban::Array<::luban::int32> initGearList;
+    /**
+     * 初始能力列表
+     */
+    ::luban::Array<::luban::String> initAbilityList;
 
     static constexpr int __ID__ = 1358600138;
+
+    int getTypeId() const override { return __ID__; }
+};
+
+}
+
+namespace Gameplay {
+
+struct AbilityTable : public luban::CfgBean 
+{
+    static bool deserializeAbilityTable(::luban::ByteBuf& _buf, ::luban::SharedPtr<AbilityTable>& _out);
+
+    virtual ~AbilityTable() {}
+
+    bool deserialize(::luban::ByteBuf& _buf);
+
+    /**
+     * ID
+     */
+    ::luban::String id;
+    /**
+     * 名称
+     */
+    ::luban::SharedPtr<Uni::BasicInfo> basicInfo;
+    /**
+     * 能力蓝图
+     */
+    ::luban::String abilityBP;
+    /**
+     * 能力标签
+     */
+    ::luban::String abilityTag;
+    /**
+     * 效果列表
+     */
+    ::luban::Array<::luban::String> effectList;
+    /**
+     * 消耗类型
+     */
+    Ability::CostType costType;
+    /**
+     * 作用类型
+     */
+    Ability::FuncType funcType;
+    /**
+     * 消耗点数
+     */
+    ::luban::float32 cost;
+    /**
+     * 冷却回合
+     */
+    ::luban::int32 cd;
+    /**
+     * 能力范围
+     */
+    ::luban::int32 range;
+    /**
+     * 基准数值
+     */
+    ::luban::float32 baseValue;
+    /**
+     * 武器伤害倍数
+     */
+    ::luban::float32 weaponMultiplier;
+    /**
+     * 由武器决定范围
+     */
+    bool rangeByWeapon;
+    /**
+     * 需要显示在UI栏
+     */
+    bool isShowInUI;
+    /**
+     * 是否有弹药
+     */
+    bool hasAmmo;
+
+    static constexpr int __ID__ = -1731121268;
 
     int getTypeId() const override { return __ID__; }
 };
@@ -941,6 +1086,49 @@ class TbLocalization
 
 }
 
+namespace Gameplay {
+
+
+class TbAbility
+{
+    private:
+    ::luban::HashMap<::luban::String, ::luban::SharedPtr<Gameplay::AbilityTable>> _dataMap;
+    ::luban::Vector<::luban::SharedPtr<Gameplay::AbilityTable>> _dataList;
+    
+    public:
+    bool load(::luban::ByteBuf& _buf)
+    {        
+        int n;
+        if (!_buf.readSize(n)) return false;
+        for(; n > 0 ; --n)
+        {
+            ::luban::SharedPtr<Gameplay::AbilityTable> _v;
+            if(!Gameplay::AbilityTable::deserializeAbilityTable(_buf, _v)) return false;
+            _dataList.push_back(_v);
+            _dataMap[_v->id] = _v;
+        }
+        return true;
+    }
+
+    const ::luban::HashMap<::luban::String, ::luban::SharedPtr<Gameplay::AbilityTable>>& getDataMap() const { return _dataMap; }
+    const ::luban::Vector<::luban::SharedPtr<Gameplay::AbilityTable>>& getDataList() const { return _dataList; }
+
+    Gameplay::AbilityTable* getRaw(::luban::String key)
+    { 
+        auto it = _dataMap.find(key);
+        return it != _dataMap.end() ? it->second.get() : nullptr;
+    }
+
+    ::luban::SharedPtr<Gameplay::AbilityTable> get(::luban::String key)
+    { 
+        auto it = _dataMap.find(key);
+        return it != _dataMap.end() ? it->second : nullptr;
+    }
+
+};
+
+}
+
 class Tables
 {
     public:
@@ -949,6 +1137,7 @@ class Tables
      Item::TbArmor TbArmor;
      Character::TbCharacter TbCharacter;
      Uni::TbLocalization TbLocalization;
+     Gameplay::TbAbility TbAbility;
 
     bool load(::luban::Loader<::luban::ByteBuf> loader)
     {
@@ -968,6 +1157,9 @@ class Tables
         buf.clear();
         if (!loader(buf, "uni_tblocalization")) return false;
         if (!TbLocalization.load(buf)) return false;
+        buf.clear();
+        if (!loader(buf, "gameplay_tbability")) return false;
+        if (!TbAbility.load(buf)) return false;
         return true;
     }
 };

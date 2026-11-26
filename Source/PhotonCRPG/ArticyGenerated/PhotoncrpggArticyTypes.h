@@ -25,6 +25,22 @@ class EPhotoncrpggSex : uint8
 
 UENUM(BlueprintType)
 enum
+/** UENUM generated form ArticyObjectDef AttrType */
+class EPhotoncrpggAttrType : uint8
+{
+	Strength = 0,
+	Agility = 1,
+	Toughness = 2,
+	Perception = 3,
+	Willpower = 4,
+	Intelligence = 5,
+	Fellowship = 6,
+};
+
+/** -------------------------------------------------------------------------------- */
+
+UENUM(BlueprintType)
+enum
 /** UENUM generated form ArticyObjectDef ShapeType */
 class EPhotoncrpggShapeType : uint8
 {
@@ -227,6 +243,42 @@ public:
 	TArray<UArticyInputPin*> InputPins;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(DisplayName="OutputPins"))
 	TArray<UArticyOutputPin*> OutputPins;
+};
+
+/** -------------------------------------------------------------------------------- */
+
+/** UCLASS generated from Articy 掷骰特性数据 Feature */
+UCLASS(BlueprintType)
+class PHOTONCRPG_API UPhotoncrpggRollDataFeature : public UArticyBaseFeature
+{
+	GENERATED_BODY()
+	
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(DisplayName="Attr Type"))
+	EPhotoncrpggAttrType AttrType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(DisplayName="Roll Target"))
+	float RollTarget = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(DisplayName="Pass Result"))
+	UArticyScriptInstruction* PassResult = nullptr;
+};
+/** UCLASS generated from ArticyObjectDef DiaRollTemplate */
+UCLASS(BlueprintType)
+class PHOTONCRPG_API UPhotoncrpggDiaRollTemplate : public UPhotoncrpggDialogueFragment,
+ public IPhotoncrpggObjectWithRollDataFeature
+{
+	GENERATED_BODY()
+	
+public:
+	
+	/** IPhotoncrpggObjectWithRollDataFeature implementation */
+	UPhotoncrpggRollDataFeature* GetFeatureRollData() const override
+	{
+		return RollData;
+	}
+	/** 掷骰特性数据 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPhotoncrpggRollDataFeature* RollData;
 };
 
 /** -------------------------------------------------------------------------------- */

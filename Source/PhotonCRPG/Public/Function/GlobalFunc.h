@@ -58,6 +58,16 @@ public:
 		return GetController()->GetCurCharacter();
 	}
 
+	// 获取角色的核心属性等级
+	UFUNCTION(BlueprintCallable, Category = "GlobalFunc")
+	static int32 GetPlayerCoreAttrLevel(const ECoreAttrType AttrType)
+	{
+		const auto CoreAttributeSet = Cast<UCoreAttributeSet>(GetPlayer()->GetAbilityComp()->GetAttributeSet(UCoreAttributeSet::StaticClass()));
+		if (!IsValid(CoreAttributeSet))
+			return -1;
+		return CoreAttributeSet->GetAttrValue(AttrType);
+	}
+
 	UFUNCTION(BlueprintCallable, Category = "GlobalFunc")
 	static int32 GetPlayerCoreAttr(const ECoreAttrType AttrType)
 	{
@@ -226,5 +236,18 @@ public:
 		}
 
 		return "";
+	}
+
+	// 加载能力蓝图
+	template<typename TargetClass>
+	static TSubclassOf<TargetClass> LoadAbility(const FString& AbilityName)
+	{
+		const FString Path = FString::Printf(TEXT("/Script/Engine.Blueprint'/Game/TopDown/GAS/Ability/%s.%s_C'"), *AbilityName, *AbilityName);
+		const auto AbilityClass = LoadClass<TargetClass>(nullptr, *Path);
+		if (IsValid(AbilityClass))
+		{
+			return AbilityClass;
+		}
+		return nullptr;
 	}
 };

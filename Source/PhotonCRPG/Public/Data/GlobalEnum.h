@@ -132,3 +132,24 @@ enum class EWeaponAtkType : uint8
 	Close		UMETA(DisplayName = "近战"),
 	SHand		UMETA(DisplayName = "副手")
 };
+
+// 能力消耗类型
+UENUM()
+enum class EAbilityCostType : uint8
+{
+	AP = 0	UMETA(DisplayName = "行动点"),
+	MP		UMETA(DisplayName = "移动点"),
+	Item	UMETA(DisplayName = "道具"),
+	Null	UMETA(DisplayName = "无"),
+};
+
+// 能力作用类型
+UENUM()
+enum class EAbilityFuncType : uint8
+{
+	Attack = 0	UMETA(DisplayName = "攻击"),
+	Assist		UMETA(DisplayName = "辅助"),
+	Heal		UMETA(DisplayName = "治疗"),
+	Move		UMETA(DisplayName = "移动"),
+	Null		UMETA(DisplayName = "无")
+};

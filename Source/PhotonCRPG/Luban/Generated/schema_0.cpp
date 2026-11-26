@@ -103,10 +103,12 @@ bool Character::CharacterTable::deserialize(::luban::ByteBuf& _buf)
     if(!_buf.readInt(age)) return false;
     if(!_buf.readString(story)) return false;
     {int __enum_temp__; if(!_buf.readInt(__enum_temp__)) return false; faction = Character::Faction(__enum_temp__); }
+    { bool _has_value_; if(!_buf.readBool(_has_value_)){return false;}  if(_has_value_) { articyId.reset(new ::luban::int32()); if(!_buf.readInt(*articyId)) return false; } else { articyId.reset(); } }
     if(!Attr::Basic::deserializeBasic(_buf, initAttrBasic)) return false;
     if(!Attr::Core::deserializeCore(_buf, initAttrCore)) return false;
     if(!Attr::Battle::deserializeBattle(_buf, initAttrBattle)) return false;
     {::luban::int32 n; if(!_buf.readSize(n)) return false; n = std::min(n, ::luban::int32(_buf.size())); initGearList.reserve(n);for(int i = 0 ; i < n ; i++) { ::luban::int32 _e; if(!_buf.readInt(_e)) return false; initGearList.push_back(_e);}}
+    {::luban::int32 n; if(!_buf.readSize(n)) return false; n = std::min(n, ::luban::int32(_buf.size())); initAbilityList.reserve(n);for(int i = 0 ; i < n ; i++) { ::luban::String _e; if(!_buf.readString(_e)) return false; initAbilityList.push_back(_e);}}
 
     return true;
 }
@@ -114,6 +116,43 @@ bool Character::CharacterTable::deserialize(::luban::ByteBuf& _buf)
 bool Character::CharacterTable::deserializeCharacterTable(::luban::ByteBuf& _buf, ::luban::SharedPtr<Character::CharacterTable>& _out)
 {
     _out.reset(LUBAN_NEW(Character::CharacterTable));
+    if (_out->deserialize(_buf))
+    {
+        return true;
+    }
+    else
+    { 
+        _out.reset();
+        return false;
+    }
+}
+
+
+bool Gameplay::AbilityTable::deserialize(::luban::ByteBuf& _buf)
+{
+
+    if(!_buf.readString(id)) return false;
+    if(!Uni::BasicInfo::deserializeBasicInfo(_buf, basicInfo)) return false;
+    if(!_buf.readString(abilityBP)) return false;
+    if(!_buf.readString(abilityTag)) return false;
+    {::luban::int32 n; if(!_buf.readSize(n)) return false; n = std::min(n, ::luban::int32(_buf.size())); effectList.reserve(n);for(int i = 0 ; i < n ; i++) { ::luban::String _e; if(!_buf.readString(_e)) return false; effectList.push_back(_e);}}
+    {int __enum_temp__; if(!_buf.readInt(__enum_temp__)) return false; costType = Ability::CostType(__enum_temp__); }
+    {int __enum_temp__; if(!_buf.readInt(__enum_temp__)) return false; funcType = Ability::FuncType(__enum_temp__); }
+    if(!_buf.readFloat(cost)) return false;
+    if(!_buf.readInt(cd)) return false;
+    if(!_buf.readInt(range)) return false;
+    if(!_buf.readFloat(baseValue)) return false;
+    if(!_buf.readFloat(weaponMultiplier)) return false;
+    if (!_buf.readBool(rangeByWeapon)) return false;
+    if (!_buf.readBool(isShowInUI)) return false;
+    if (!_buf.readBool(hasAmmo)) return false;
+
+    return true;
+}
+
+bool Gameplay::AbilityTable::deserializeAbilityTable(::luban::ByteBuf& _buf, ::luban::SharedPtr<Gameplay::AbilityTable>& _out)
+{
+    _out.reset(LUBAN_NEW(Gameplay::AbilityTable));
     if (_out->deserialize(_buf))
     {
         return true;

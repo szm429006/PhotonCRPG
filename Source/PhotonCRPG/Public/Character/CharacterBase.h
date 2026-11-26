@@ -9,6 +9,9 @@
 #include "Data/UniversalDataStruct.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayTagContainer.h"
+#include "Interfaces/InteractInterface.h"
+#include "Data/GlobalTags.h"
+#include "Character/Components/AbilityComponent.h"
 #include "CharacterBase.generated.h"
 
 class UCapsuleComponent;
@@ -25,9 +28,10 @@ struct FGearData;
 class UStaticMeshComponent;
 struct FGameplayTag;
 class UWeaponObject;
+class UInteractComponent;
 
 UCLASS()
-class PHOTONCRPG_API ACharacterBase : public ACharacter, public IAbilitySystemInterface
+class PHOTONCRPG_API ACharacterBase : public ACharacter, public IAbilitySystemInterface, public IInteractInterface
 {
 	GENERATED_BODY()
 
@@ -55,6 +59,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "组件", DisplayName = "装备组件")
 	TObjectPtr<UEquipComponent> EquipComp;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<UInteractComponent> InteractComp;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "配置", DisplayName = "角色ID")
 	FString CharacterID;
 
@@ -63,6 +70,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "数据", DisplayName = "阵营")
 	EFactionType Faction = EFactionType::NPC;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "数据", DisplayName = "对话ID")
+	int32 ArticyID = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "数据", DisplayName = "动画标签")
 	FGameplayTag AnimTag;
@@ -81,6 +91,9 @@ protected:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void InitializeData();
+
+	// 死亡回调
+	void OnDeathStateChanged(const FGameplayTag CallbackTag, int32 NewCount);
 
 	UFUNCTION(BlueprintCallable)
 	void AnimTest(const bool bIsInBattle);
@@ -103,21 +116,26 @@ public:
 	// 更换装备
 	void GearChange(const FGearData& InGear, const bool bIsWear = true);
 
-	UFUNCTION(BlueprintCallable)
+	virtual void MakeInteraction() override;
+
+	UFUNCTION(BlueprintCallable, Category = "角色")
 	FORCEINLINE FString GetCharacterID() const { return CharacterID; }
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "角色")
 	FORCEINLINE EFactionType GetFaction() const { return Faction; }
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "角色")
 	FORCEINLINE FCharInfoData GetInfo() const { return CharInfoData; }
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "角色")
 	FORCEINLINE UAbilityComponent* GetAbilityComp() const { return AbilityComp; }
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "角色")
 	FORCEINLINE UAttributeHandlerComponent* GetAttrHandlerComp() const { return AttrHandlerComp; }
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "角色")
 	FORCEINLINE UEquipComponent* GetEquipComp() const { return EquipComp; }
+
+	UFUNCTION(BlueprintCallable, Category = "角色")
+	FORCEINLINE bool IsDead() const { return AbilityComp->HasMatchingGameplayTag(GlobalTags::State_Dead); }
 };

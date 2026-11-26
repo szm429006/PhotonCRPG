@@ -4,6 +4,7 @@
 #include "GAS/Attribute/BasicAttributeSet.h"
 #include "SubSystem/DataSystem.h"
 #include "GameplayEffectExtension.h"
+#include "Data/GlobalTags.h"
 
 UBasicAttributeSet::UBasicAttributeSet()
 {
@@ -69,6 +70,9 @@ void UBasicAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute
     if (Attribute == GetHealthAttribute() && NewValue <= 0.f)
     {
         // 执行死亡逻辑
+        FGameplayTagContainer DeathTagContainer;
+        DeathTagContainer.AddTag(GlobalTags::Ability_Death);
+        GetOwningAbilitySystemComponent()->TryActivateAbilitiesByTag(DeathTagContainer);
     }
 }
 

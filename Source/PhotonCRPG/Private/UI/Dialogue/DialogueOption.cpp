@@ -14,6 +14,8 @@
 #include "Function/GlobalFunc.h"
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
+#include "Subsystem/DiceSystem.h"
+#include "PhotonCRPG/ArticyGenerated/PhotoncrpggArticyTypes.h"
 
 void UDialogueOption::NativeConstruct()
 {
@@ -27,6 +29,8 @@ void UDialogueOption::RefreshData(UArticyFlowPlayer* ArticyPlayer, const FArticy
     DialogueBranch = Branch;
 
     const auto BaseObject = Cast<UArticyObject>(Branch.GetTarget().GetObject());
+
+    DiceContent->SetVisibility(ESlateVisibility::Collapsed);
     bIsContinue = false;
     bIsClose = false;
 
@@ -35,6 +39,8 @@ void UDialogueOption::RefreshData(UArticyFlowPlayer* ArticyPlayer, const FArticy
         ParentId = BaseObject->GetParentID();
         OptionId = BaseObject->GetId();
         bIsInteracted = UGlobalFunc::GetSubsystem<UDialogueSystem>()->IsOptionInteracted(ParentId, OptionId);
+
+        RollTemplate = Cast<UPhotoncrpggDiaRollTemplate>(Branch.GetTarget().GetObject());
 
         IArticyObjectWithMenuText* ArticyMenuText = Cast<IArticyObjectWithMenuText>(Branch.GetTarget().GetObject());
         if (ArticyMenuText)
@@ -48,6 +54,24 @@ void UDialogueOption::RefreshData(UArticyFlowPlayer* ArticyPlayer, const FArticy
             else
             {
                 TextContent->SetText(Content);
+
+                // 如果有掷骰信息，显示在骰子内容中
+                if (IsValid(RollTemplate))
+                {
+                    const auto RollData = RollTemplate->GetFeatureRollData();
+                    const ECoreAttrType AttrType = static_cast<ECoreAttrType>(RollData->AttrType);
+                    const uint8 AttrLevel = UGlobalFunc::GetPlayerCoreAttrLevel(AttrType);
+                    const uint8 RollTarget = static_cast<uint8>(RollData->RollTarget);
+                    const float PassRate = UGlobalFunc::GetSubsystem<UDiceSystem>()->GetPassRate_2D6(AttrType, RollTarget) * 100;
+
+                    FNumberFormattingOptions Options;
+                    Options.MinimumFractionalDigits = 1;
+                    Options.MaximumFractionalDigits = 2;
+                    const FText DiceTextContent = FText::Format(NSLOCTEXT("Common", "Roll", "{0}({1})，目标：{2}点，{3}%"),
+                        FText::FromString(UGlobalFunc::GetLocNameByEnum(AttrType)), AttrLevel, RollTarget, FText::AsNumber(PassRate, &Options));
+                    DiceContent->SetText(DiceTextContent);
+                    DiceContent->SetVisibility(ESlateVisibility::Visible);
+                }
             }
         }
     }
@@ -62,9 +86,22 @@ void UDialogueOption::OnClickAction()
 {
     if (!bIsClose)
     {
-        if (!bIsContinue)
+        // 如果选项有掷骰要求，先进行掷骰
+        if (IsValid(RollTemplate))
         {
-            UGlobalFunc::GetSubsystem<UDialogueSystem>()->SetOptionInteracted(ParentId, OptionId);
+            const auto RollData = RollTemplate->GetFeatureRollData();
+            const ECoreAttrType AttrType = static_cast<ECoreAttrType>(RollData->AttrType);
+            if (UGlobalFunc::GetSubsystem<UDiceSystem>()->GetCheckResult(AttrType, RollData->RollTarget))
+            {
+                RollData->PassResult->Execute();
+            }
+        }
+        else
+        {
+            if (!bIsContinue)
+            {
+                UGlobalFunc::GetSubsystem<UDialogueSystem>()->SetOptionInteracted(ParentId, OptionId);
+            }
         }
 
         if (IsValid(DialoguePlayer))

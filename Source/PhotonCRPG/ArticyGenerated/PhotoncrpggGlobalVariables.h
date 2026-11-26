@@ -11,6 +11,33 @@
 #pragma warning(disable: 4883) //<disable "optimization cannot be applied due to function size" compile error.
 #endif
 
+UCLASS(BlueprintType)
+class PHOTONCRPG_API UPhotoncrpggBranchTestVariables : public UArticyBaseVariableSet
+{
+	GENERATED_BODY()
+	
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="BranchTest")
+	UArticyBool* IsEnd = nullptr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="BranchTest")
+	UArticyBool* CheckPassed = nullptr;
+	
+	 UPhotoncrpggBranchTestVariables() 
+	{
+		IsEnd = CreateDefaultSubobject<UArticyBool>("IsEnd");
+		CheckPassed = CreateDefaultSubobject<UArticyBool>("CheckPassed");
+	}
+	
+	void Init(UArticyGlobalVariables* const Store) 
+	{
+		/** initialize the variables */
+		IsEnd->Init<UArticyBool>(this, Store, TEXT("BranchTest.IsEnd"), false);
+		this->Variables.Add(IsEnd);
+		CheckPassed->Init<UArticyBool>(this, Store, TEXT("BranchTest.CheckPassed"), false);
+		this->Variables.Add(CheckPassed);
+	}
+};
+
 /** Global Articy Variables */
 UCLASS(BlueprintType)
 class PHOTONCRPG_API UPhotoncrpggGlobalVariables : public UArticyGlobalVariables
@@ -18,10 +45,13 @@ class PHOTONCRPG_API UPhotoncrpggGlobalVariables : public UArticyGlobalVariables
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="BranchTest")
+	UPhotoncrpggBranchTestVariables* BranchTest = nullptr;
 	
 	 UPhotoncrpggGlobalVariables() 
 	{
 		/** create the namespaces */
+		BranchTest = CreateDefaultSubobject<UPhotoncrpggBranchTestVariables>("BranchTest");
 		
 		Init();
 	}
@@ -29,6 +59,8 @@ public:
 	void Init() 
 	{
 		/** initialize the namespaces */
+		BranchTest->Init(this);
+		this->VariableSets.Add(BranchTest);
 	}
 	
 	/** Get the default GlobalVariables (a copy of the asset). */

@@ -27,12 +27,14 @@ private:
 	
 private:
 	
+	mutable TWeakObjectPtr<UPhotoncrpggBranchTestVariables> BranchTest = nullptr;
 	mutable TWeakObjectPtr<UPhotoncrpggGlobalVariables> ActiveGlobals = nullptr;
 	
 	void SetGV(UArticyGlobalVariables* GV) const override
 	{
 		auto gv = Cast<UPhotoncrpggGlobalVariables>(GV);
 		/** Initialize all GV namespace references (or nullify if we're setting to nullptr) */
+		BranchTest = gv ? gv->BranchTest : nullptr;
 		/** Store GVs */
 		ActiveGlobals = gv;
 	}
@@ -57,6 +59,32 @@ public:
 	#endif
 	 UPhotoncrpggExpressoScripts() 
 	{
+		Instructions.Add(1165380266, [&]
+		{
+			(*BranchTest->IsEnd) = true;
+		});
+		Conditions.Add(1760557963, [&]
+		{
+			return ConditionOrTrue(
+				(*BranchTest->CheckPassed) == false
+			);
+		});
+		Instructions.Add(-1106802048, [&]
+		{
+			(*BranchTest->CheckPassed) = true;
+		});
+		Conditions.Add(-1466777560, [&]
+		{
+			return ConditionOrTrue(
+				(*BranchTest->IsEnd) == true
+			);
+		});
+		Conditions.Add(991634050, [&]
+		{
+			return ConditionOrTrue(
+				(*BranchTest->CheckPassed) == true
+			);
+		});
 	}
 	#if !((defined(PLATFORM_PS4) && PLATFORM_PS4) || (defined(PLATFORM_PS5) && PLATFORM_PS5))
 	#pragma warning(pop)

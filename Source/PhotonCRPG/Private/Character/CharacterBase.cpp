@@ -25,6 +25,7 @@
 #include "Data/GlobalTags.h"
 #include "Components/StaticMeshComponent.h"
 #include "Item/WeaponObject.h"
+#include "Character/Components/InteractComponent.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
@@ -68,6 +69,11 @@ ACharacterBase::ACharacterBase()
 	// Create equip component
 	UE_LOG(LogTemp, Warning, TEXT("CreateDefaultSubobject<UEquipComponent>(TEXT(\"EquipComp\"))"));
 	EquipComp = CreateDefaultSubobject<UEquipComponent>(TEXT("EquipComp"));
+
+	// Create interact component
+	UE_LOG(LogTemp, Warning, TEXT("CreateDefaultSubobject<UInteractComponent>(TEXT(\"InteractComp\"))"));
+	InteractComp = CreateDefaultSubobject<UInteractComponent>(TEXT("InteractComp"));
+	InteractComp->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -76,6 +82,8 @@ void ACharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 	InitializeData();
+
+	AbilityComp->RegisterGameplayTagEvent(GlobalTags::State_Dead).AddUObject(this, &ACharacterBase::OnDeathStateChanged);
 }
 
 void ACharacterBase::InitializeData_Implementation()
@@ -85,6 +93,7 @@ void ACharacterBase::InitializeData_Implementation()
 	{
 		CharInfoData = FCharInfoData(TbCharacterData);
 		Faction = static_cast<EFactionType>(TbCharacterData->faction);
+		ArticyID = TbCharacterData->articyId != nullptr ? *TbCharacterData->articyId : 0;
 	}
 
 	// UE_LOG(LogTemp, Warning, TEXT("InitializeData_Implementation: TbCharacterData"));
@@ -123,6 +132,14 @@ void ACharacterBase::InitializeData_Implementation()
 				Cast<IUnitComponentInterface>(Comp)->DoInitialize();
 			}
 		}
+	}
+}
+
+void ACharacterBase::OnDeathStateChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	if (NewCount > 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("角色已死亡"));
 	}
 }
 
@@ -214,5 +231,16 @@ void ACharacterBase::GearChange(const FGearData& InGear, const bool bIsWear)
 	for (auto AttrSet : OwnedAttributeSets)
 	{
 		AttrSet->GearChange(InGear, bIsWear);
+	}
+}
+
+void ACharacterBase::MakeInteraction()
+{
+	IInteractInterface::MakeInteraction();
+	UE_LOG(LogTemp, Warning, TEXT("MakeInteraction: ArticyID = %d"), ArticyID);
+	if (ArticyID != 0)
+	{
+		UGlobalFunc::GetGameMode()->ArticyPlayDialogueById(ArticyID);
+		UE_LOG(LogTemp, Warning, TEXT("ArticyPlayDialogueById: ArticyID = %d"), ArticyID);
 	}
 }

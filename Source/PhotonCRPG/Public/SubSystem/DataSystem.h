@@ -39,4 +39,7 @@ public:
 
 	FORCEINLINE luban::SharedPtr<cfg::Uni::LocalizationTable> GetTbLocalizationData(const FString& LocalizationID)
 	{ return GlobalTables.TbLocalization.get(UDataFunc::FStringToStd(LocalizationID)); }
+
+	FORCEINLINE luban::SharedPtr<cfg::Gameplay::AbilityTable> GetTbAbilityData(const FString& AbilityID)
+	{ return GlobalTables.TbAbility.get(UDataFunc::FStringToStd(AbilityID)); }
 };

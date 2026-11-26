@@ -12,6 +12,7 @@ class UArticyObject;
 struct FArticyBranch;
 class UButton;
 class UTextBlock;
+class UPhotoncrpggDiaRollTemplate;
 
 /**
  * 
@@ -34,6 +35,9 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<UArticyFlowPlayer> DialoguePlayer;
+
+	UPROPERTY()
+	TObjectPtr<UPhotoncrpggDiaRollTemplate> RollTemplate;
 
 	FArticyBranch DialogueBranch;
 

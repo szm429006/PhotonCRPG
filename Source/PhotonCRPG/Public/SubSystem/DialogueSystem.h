@@ -33,6 +33,8 @@ protected:
 	UPROPERTY()
 	TMap<int32, FDialogueInteractStruct> InteractedOptions;
 
+	bool bIsSkip;
+
 public:
 
 	void ShowDialogueItem(UArticyFlowPlayer* ArticyPlayer, const TScriptInterface<IArticyFlowObject>& PausedOn);
